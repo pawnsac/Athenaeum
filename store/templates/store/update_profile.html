@@ -1,0 +1,44 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+     <div class="row">
+		<div class="col-lg-6">
+			<div class="box-element" id="form-wrapper">
+				<p  style ="align-content: center;"><strong>Change Password</strong></p>
+				<form action="/update_profile/"  method="post">{% csrf_token %}
+					<input type='hidden' name='id' value= {{customer}} >
+					<div id="user-info">
+						<div class="form-field">
+							<input required class="form-control" type="password" name="password1" placeholder="New password..">
+						</div>
+						<div class="form-field">
+							<input required class="form-control" type="password" name="password2" placeholder="Type again...">
+						</div>
+					</div>
+					<hr>
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+				</form>
+
+			<br>
+		<p style ="align-content:  center;"><strong>Change Email</strong></p>
+				<form action="/update_profile/"  method="post">{% csrf_token %}
+					<input type='hidden' name='id' value= {{customer}} >
+					<div id="user-info">
+						<div class="form-field">
+							<input required class="form-control" type="email" name="e1" placeholder="New Email..">
+						</div>
+						<div class="form-field">
+							<input required class="form-control" type="email" name="e2" placeholder="Type again...">
+						</div>
+					</div>
+					<hr>
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="Continue">
+				</form>
+			</div>
+
+			<br>
+			
+		</div>
+
+	</div>
+{% endblock content %}

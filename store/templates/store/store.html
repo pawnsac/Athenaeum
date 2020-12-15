@@ -1,0 +1,36 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+	
+	<div align="center">
+<form action="/search/"  method="post">{% csrf_token %}
+    <label for="search_text"> </label>
+    
+    <h1>Hi, {{name}} </h1>
+    <br>
+    <input class="btn btn-outline-secondary add-btn" id="search_text" type="text" name="search_text" value="{{ Yeats... }}" placeholder="Search any books here... ">
+	<input type='hidden' name='id' value= {{customer}} >
+    <input class="btn btn-outline-secondary add-btn" type="submit" value="Search">
+</form>
+</div>
+
+	<div align="center">
+<form action="/search_genre/"  method="post">{% csrf_token %}
+	<input type='hidden' name='id' value= {{customer}} >
+    <label for="search_text"> </label>
+    
+    <h1> </h1>
+         <select class="btn btn-outline-secondary add-btn" name="genre">
+             <option disabled="disabled" selected="selected">Genre</option>
+               <option value="Fiction">Fiction</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="Non-Fiction">Non-Fiction</option>
+          <option value="Poetry">Poetry</option>
+     </select>
+	<input type='hidden' name='id' value= {{customer}} >
+    <input class="btn btn-outline-secondary add-btn" type="submit" value="Explore">
+</form>
+</div>
+
+
+{% endblock content %}

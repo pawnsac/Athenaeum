@@ -1,0 +1,17 @@
+{% extends 'store/writer/main.html' %}
+{% load static %}
+{% block content %}
+	<div class="row">
+		{% for book in books %}
+		<div class="col-lg-4">
+			<div class="box-element product">
+				<h6><strong>{{book.1}}</strong></h6>
+				<hr>
+				<h6>Summary</h6>
+			{{book.11}}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+{% endblock content %}

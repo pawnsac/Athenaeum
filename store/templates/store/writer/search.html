@@ -1,0 +1,43 @@
+{% extends 'store/writer/main.html' %}
+{% load static %}
+{% block content %}
+	<div align="center">
+<form action="/w_search/"  method="post">{% csrf_token %}
+    <label for="search_text"> </label>
+    
+    <h1> </h1>
+    <input class="btn btn-outline-secondary add-btn" id="search_text" type="text" name="search_text" value="{{ Yeats... }}" placeholder="Search any books here... ">
+	<input type='hidden' name='id' value= {{writer}} >
+    <input class="btn btn-outline-secondary add-btn" type="submit" value="Search">
+</form>
+	{% if nobooks == True %}
+<br>
+<br>
+	<div align="center">
+		<h4 style="display: inline-block; "><strong>No search Results</strong></h4>
+		</div>
+</div>
+{% endif %}
+	<div class="row">
+		{% for book in books %}
+		<div class="col-lg-4">
+			<div class="box-element product">
+				<h6><strong>{{book.1}}</strong></h6>
+				<hr>
+					<form action="/w_vbook/"  method="post">{% csrf_token %}
+					<label for="book_id"> </label>
+					<input type='hidden' name='book_id' value= {{book.0}} >
+						<input type='hidden' name='id' value= {{writer}} >
+					 <input class="btn btn-outline-success" type="submit" value="View">
+					
+				</form>
+				
+				<br>
+				<h4 style="display: inline-block; float: center"><strong>${{book.10}}</strong></h4>
+
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+{% endblock content %}
