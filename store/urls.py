@@ -25,4 +25,9 @@ urlpatterns = [
 	path('register/', views.register, name="register"),
 	path('update_profile/', views.update_profile, name="update_profile"),
 	path('search_genre/', views.search_genre, name="search_genre"),
+	path('addreview/', views.addreview, name="addreview"),
+	path('manual/', views.manual, name="manual"),
+	path('w_manual/', views.w_manual, name="w_manual"),
+
+
 ]

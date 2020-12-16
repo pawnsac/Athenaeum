@@ -5,12 +5,27 @@
 		{% for book in books %}
 		<div class="col-lg-4">
 			<div class="box-element product">
-				<h6><strong>{{book.1}}</strong></h6>
+				<h6><strong>{{book.1}} </strong>by {{book.2 }} <h6 style=" float: center"> Rating: {{rating|floatformat:2}} </h6></h6>
+				<h6 style=" float: center"> Language: {{book.5}} </h6>
+				<h6 style=" float: center"> Genre: {{book.9}} </h6>
 				<hr>
 				<h6>Summary</h6>
 			{{book.11}}
 			</div>
 		</div>
+
+		{% for review in reviews %}
+			<div class="col-lg-4">
+			<div class="box-element product">
+				<h6> Review by:<strong> {{review.2}}</strong> Rating: {{review.4}}</h6>
+				<hr>
+				<h6>Description</h6>
+			{{review.5}}
+			</div>
+		</div>
+		{% endfor %}
+
+
 		{% endfor %}
 	</div>
 

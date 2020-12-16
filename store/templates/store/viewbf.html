@@ -4,9 +4,11 @@
 
 	<div class="row">
 		{% for book in books %}
-		<div class="col-lg-4">
+		<div class="col-lg-10">
 			<div class="box-element product">
-				<h6><strong>{{book.1}}</strong></h6>
+			<h6><strong>{{book.1}} </strong>by {{book.2}}</h6>
+					<h6 style=" float: center"> Language: {{book.5}} </h6>
+				<h6 style=" float: center"> Genre: {{book.9}} </h6>
 				<hr>
 				<h6>Reading</h6>
 			{{book.12}}

@@ -1,0 +1,41 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+     <div class="row">
+		<div class="col-lg-5">
+			<div class="box-element" id="form-wrapper">
+				<p  style ="align-content: center;"><strong>Add review</strong></p>
+				<form action="/addreview/"  method="post">{% csrf_token %}
+					<input type='hidden' name='id' value= {{customer}} >
+					<div id="user-info">
+						<div class="form-field">
+								<input type='hidden' name='book_id' value={{book}} >
+						<select class="btn btn-outline-secondary add-btn" name="stars">
+             <option disabled="disabled" selected="selected">Give Stars</option>
+               <option value="1">★</option>
+          <option value="2">★★</option>
+          <option value="3">★★★</option>
+          <option value="4">★★★★</option>
+            <option value="5">★★★★★</option>
+     </select>
+						</div>
+					<div>
+					<br>
+				<textarea required class="form-control" rows = "5" cols = "40" name = "description" placeholder="Add your review..."></textarea>
+
+				</div>
+					</div>
+					<hr>
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="Submit">
+				</form>
+
+			<br>
+			
+			</div>
+
+			<br>
+			
+		</div>
+
+	</div>
+{% endblock content %}

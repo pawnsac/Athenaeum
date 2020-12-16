@@ -38,6 +38,10 @@
 	   </div>
 	    </ul>
 	    <div class="form-inline my-2 my-lg-0">
+	 <form action="/manual/"  method="post">{% csrf_token %}
+	<input type='hidden' name='id' value= {{customer}} >
+	 <input class="btn btn-outline-secondary add-btn" type="submit" style="color:white" value="User Manual">
+	  </form> 	
 	  <form action="/update_profile/"  method="post">{% csrf_token %}
 	<input type='hidden' name='id' value= {{customer}} >
 	 <input class="btn btn-outline-secondary add-btn" type="submit" style="color:white" value="Update Profile">

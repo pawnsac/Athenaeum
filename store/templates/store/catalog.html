@@ -3,17 +3,28 @@
 {% block content %}
 	<div class="row">
 		{% for book in books %}
-		<div class="col-lg-4">
+		<div class="col-lg-3">
 			<div class="box-element product">
-				<h6><strong>{{book.1}}</strong></h6>
+				<h6><strong>{{book.1}} </strong>by {{book.2}}</h6>
 				<hr>
+				<div class="form-field">
 					<form action="/viewbf/"  method="post">{% csrf_token %}
 					<label for="book_id"> </label>
 					<input type='hidden' name='book_id' value= {{book.0}} >
 					<input type='hidden' name='id' value= {{customer}} >
 					 <input class="btn btn-outline-success" type="submit" value="Read">
 				</form>
-				
+
+</div>
+<div class="form-field">
+			<form action="/addreview/"  method="post">{% csrf_token %}
+					<label for="book_id"> </label>
+					<input type='hidden' name='book_ids' value= {{book.0}} >
+					<input type='hidden' name='id' value= {{customer}} >
+					 <input class="btn btn-outline-success" type="submit" value="Add Review">
+
+				</form>
+				</div>
 
 			</div>
 		</div>

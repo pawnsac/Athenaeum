@@ -18,8 +18,6 @@ def store(request, customer=None):
 	sc=c.fetchall()
 	citems=len(sc)
 	c.close()
-	
-	
 	context = {'name':name, 'citems':citems, 'customer':customer}
 	return render(request, 'store/store.html', context)
 
@@ -151,8 +149,25 @@ def view_book(request):
 		txt=int(txt)
 		c.execute("SELECT * FROM books where book_id = ? ",(txt,))
 		books = c.fetchall()
+		c.execute("SELECT * FROM reviews where book_id = ? ",(txt,))
+		reviews = c.fetchall()
+		reviews=[[i for i in book] for book in reviews]
+		count=len(reviews)
+		rating=0
+		i=0
+
+		if(count!=0):
+			for r in reviews:
+				c.execute("SELECT customers_name FROM customer where customer_id = ? ",(int(r[3]),))
+				name = c.fetchone()[0]
+				rating+=r[4]
+				reviews[i][2]=name
+				i+=1
+			rating/=count
+
 		c.close()
-		context = {'books':books, 'customer':customer,'citems':citems}	
+		context = {'books':books, 'customer':customer,'citems':citems,'reviews':reviews, 'rating':rating}
+
 		return render(request, 'store/viewb.html', context)
 
 	return render(request, 'store/viewb.html', {'books':[]})
@@ -265,13 +280,9 @@ def w_main_redirect(request):
 
 
 def add_book(request):
-
 	writer=request.POST.get('writer')
 	context = { 'writer':writer}
-
 	return render(request, 'store/writer/add_book.html', context)
-
-
 
 
 def abr(request):
@@ -291,7 +302,8 @@ def add_book(request):
 		language=request.POST.get('language')
 		title=request.POST.get('title')
 		num_pages=request.POST.get('pages')
-		book_text=request.POST.get('Text')
+		book_text=""""""
+		book_text+=request.POST.get('text')
 		reviews_count=0
 		average_rating=0
 		writer_id=int(writer)
@@ -338,8 +350,26 @@ def w_vbook(request):
 		txt=int(txt)
 		c.execute("SELECT * FROM books where book_id = ? ",(txt,))
 		books = c.fetchall()
+		c.execute("SELECT * FROM reviews where book_id = ? ",(txt,))
+		reviews = c.fetchall()
+		reviews=[[i for i in book] for book in reviews]
+		count=len(reviews)
+		rating=0
+		i=0
+		if(count!=0):
+			for r in reviews:
+				
+				c.execute("SELECT customers_name FROM customer where customer_id = ? ",(int(r[3]),))
+				name = c.fetchone()[0]
+				rating+=r[4]
+				reviews[i][2]=name
+				i+=1
+			rating/=count
+
 		c.close()
-		context = {'books':books, 'writer':writer}	
+
+
+		context = {'books':books, 'writer':writer,'reviews':reviews, 'rating':rating}	
 		return render(request, 'store/writer/viewb.html', context)
 
 	return render(request, 'store/writer/viewb.html', {'books':[],'writer':writer})
@@ -476,3 +506,46 @@ def search_genre(request):
 	citems=len(sc)
 	nobooks=True
 	return render(request, 'store/search.html', {'books':[],'customer':customer,'citems':citems,'nobooks':nobooks})
+
+
+def addreview(request):
+	conn=sqlite3.connect("db.db")
+	c=conn.cursor()
+	customer=int(request.POST['id'])
+	c.execute("SELECT * FROM shopping_cart where customer_id= ?",(customer,))
+	sc=c.fetchall()
+	citems=len(sc)
+	book=request.POST.get('book_ids', False)
+	if request.POST.get('stars', False)!=False and request.POST.get('description', False)!=False:
+		book_id=request.POST.get('book_id', False)
+		d=request.POST.get('description', False)
+		s=int(request.POST.get('stars', False))
+		c.execute("insert into reviews(book_id,customer_id,rating,review_text) values(?,?,?,?)",(book_id,customer,s,d,))
+		conn.commit()
+		return store(request,customer)
+	return render(request, 'store/addreview.html', {'books':[],'customer':customer,'citems':citems,'book':book})
+
+def manual(request):
+	conn=sqlite3.connect("db.db")
+	c=conn.cursor()
+	customer=int(request.POST.get('id', False))
+	c.execute("SELECT * FROM shopping_cart where customer_id= ?",(customer,))
+	sc=c.fetchall()
+
+	citems=len(sc)
+	manual=""" Readers: As a reader you can search, buy and read books online. In order to buy a book search for it using the search bar or explore by genre option -> add the book to your shopping cart -> go to your shopping cart -> proceed to checkout -> confirm payment. The book will be added to your catalog.
+"""
+	context={'customer':customer,'citems':citems,'manual':manual}
+
+	return render(request, 'store/manual.html', context)
+
+def w_manual(request):
+	conn=sqlite3.connect("db.db")
+	c=conn.cursor()
+	writer=int(request.POST.get('id', False))
+	manual="""Writers can sell their books online on Athaneum. To add a book go to add book option, fill in the information and the book will be added to the writer's catalog and will be available for the customers to buy. Writers can also look at their publised books and their reviews by going to the catalog."""
+	
+	context={'writer':writer,'manual':manual}
+
+	return render(request, 'store/writer/manual.html', context)
+

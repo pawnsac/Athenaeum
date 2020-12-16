@@ -8,7 +8,7 @@
 				<form id="form" method="POST" action="/add_book/">{% csrf_token %}
 					<div id="shipping-info">
 						<hr>
-						<p><strong>Book Information</strong></p>
+						<p><h2><strong>Book Information</strong></h2></p>
 						<hr>
 						<input type='hidden' name='id' value= {{writer}} >
 						<div class="form-field">
@@ -41,10 +41,8 @@
 							<input class="form-control" type="text" name="summary" placeholder="summary">
 					
 					</div>
-						<div class="form-field">
-							<input class="form-control" type="text" name="Text" placeholder="Text">
-							
-						</div>
+						
+							<textarea required class="form-control" rows = "5" cols = "40" name = "text" placeholder="Add your original text..."></textarea>
 					</div>
 					
 					<hr>

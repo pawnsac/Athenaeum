@@ -42,7 +42,10 @@
 	   </div>
 	    </ul>
 
-	
+<form action="/w_manual/"  method="post">{% csrf_token %}
+	<input type='hidden' name='id' value= {{writer}} >
+	 <input class="btn btn-outline-secondary add-btn" type="submit" style="color:white" value="User Manual">
+	  </form> 	
 
 	    <div class="form-inline my-2 my-lg-0">
 
