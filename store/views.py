@@ -28,7 +28,7 @@ def cart(request):
 	c.execute("SELECT * FROM shopping_cart where customer_id= ?",(customer,))
 	boks = c.fetchall()
 	books=[]
-	print(boks)
+
 	total_price=0
 	for book in boks:
 		book_id=book[2]
@@ -39,7 +39,7 @@ def cart(request):
 
 	c.execute("SELECT * FROM shopping_cart where customer_id= ?",(customer,))
 	sc=c.fetchall()
-	print(sc)
+
 	citems=len(sc)
 	items=books
 	context = {'items':items, 'customer':customer,'citems':citems,'total_price':total_price}
@@ -62,13 +62,13 @@ def checkout(request):
 
 	c.execute("SELECT * FROM shopping_cart where customer_id= ?",(customer,))
 	sc=c.fetchall()
-	print(sc)
+
 	citems=len(sc)
 	items = []
 	order = {'get_cart_total':0, 'get_cart_items':0}
 	c=conn.cursor()
 	
-	print(customer)
+
 	ccn=int(request.POST.get('ccn', False))
 	cvc=int(request.POST.get('cvc', False))
 
@@ -116,14 +116,14 @@ def search(request):
 				c.execute("SELECT * FROM books where book_id = ? ",(book_id,))
 				books_c.append(c.fetchone())
 			books_c=[[i for i in book] for book in books_c]
-			print(books_c)
+	
 			for element in books:
 				if element in books_c:
 					books.remove(element)
 			for element in books:
 				if element in books_c:
 					books.remove(element)
-			print(books)
+		
 			nobooks=False
 			if(books==[]):
 				nobooks=True
@@ -179,12 +179,12 @@ def catalog(request):
 	c=conn.cursor()
 	c.execute("SELECT * FROM shopping_cart where customer_id= ?",(customer,))
 	sc=c.fetchall()
-	print(sc)
+	
 	citems=len(sc)
 	c.execute("SELECT * FROM customers_Catalog where customer_id= ?",(customer,))
 	boks = c.fetchall()
 	books=[]
-	print(boks)
+
 	for book in boks:
 		book_id=book[1]
 		c.execute("SELECT * FROM books where book_id = ? ",(book_id,))
@@ -211,7 +211,7 @@ def login(request):
 			passw=c.fetchall()
 			c.execute("SELECT password FROM writer where email_adress= ?",(username,))
 			passww=c.fetchall()
-			print(passw)
+		
 			if(passw!=[]):
 				passw=passw[0][0]
 			if(passww!=[]):
@@ -219,12 +219,12 @@ def login(request):
 			if(passw==password):
 				c.execute("SELECT customer_id FROM customer where email_adress= ?",(username,))
 				id=c.fetchone()[0]
-				print(id)
+			
 				return store(request, id)
 			elif passww==password:
 				c.execute("SELECT writer_id FROM writer where email_adress= ?",(username,))
 				id=c.fetchone()[0]
-				print(id)
+			
 				return w_store(request, id)
 			else:
 				return redirect('login')
@@ -257,7 +257,7 @@ def dbook(request):
 	c=conn.cursor()
 	customer=int(request.POST.get('id', False))
 	book_id  = int(request.POST.get('book_id', False))
-	print(book_id)
+
 	c.execute("DELETE FROM shopping_cart WHERE book_id=? and customer_id= ?",(book_id,customer,))
 	conn.commit()
 
@@ -311,7 +311,7 @@ def add_book(request):
 		c.execute("select writer_name from writer where writer_id=?",(writer,))
 		writer_name=c.fetchall()
 		writer_name=writer_name[0][0]
-		print(writer_name)
+	
 		try:
 			c.execute("insert into books(title,writer_name, writer_id,isbn,language,num_pages,reviews_count,average_rating,genre,Price,summary,book_text,publishing_id) values(?,?,?,?,?,?,?,?,?,?,?,?,?)",(title,writer_name, writer_id,isbn,language,num_pages,reviews_count,average_rating,genre,Price,summary,book_text,publishing_id,))
 			c.execute("select book_id from books where num_pages=? and writer_id=? and isbn=?",(num_pages,writer_id,isbn,))
@@ -331,7 +331,7 @@ def w_catalog(request):
 	c.execute("SELECT * FROM writers_catalog where writer_id= ?",(writer,))
 	boks = c.fetchall()
 	books=[]
-	print(boks)
+
 	for book in boks:
 		book_id=book[1]
 		c.execute("SELECT * FROM books where book_id = ? ",(book_id,))
@@ -358,7 +358,6 @@ def w_vbook(request):
 		i=0
 		if(count!=0):
 			for r in reviews:
-				
 				c.execute("SELECT customers_name FROM customer where customer_id = ? ",(int(r[3]),))
 				name = c.fetchone()[0]
 				rating+=r[4]
@@ -366,10 +365,13 @@ def w_vbook(request):
 				i+=1
 			rating/=count
 
-		c.close()
+		c.execute("select * from customers_Catalog where book_id=?",(books[0][0],))
+		price=c.fetchall()
+		sellcount = len(price)
+		price=books[0][10]
 
-
-		context = {'books':books, 'writer':writer,'reviews':reviews, 'rating':rating}	
+		revenue=price*sellcount
+		context = {'books':books, 'writer':writer,'reviews':reviews, 'rating':rating,'revenue':revenue,'sellcount':sellcount}	
 		return render(request, 'store/writer/viewb.html', context)
 
 	return render(request, 'store/writer/viewb.html', {'books':[],'writer':writer})
@@ -487,14 +489,14 @@ def search_genre(request):
 				c.execute("SELECT * FROM books where book_id = ? ",(book_id,))
 				books_c.append(c.fetchone())
 			books_c=[[i for i in book] for book in books_c]
-			print(books_c)
+
 			for element in books:
 				if element in books_c:
 					books.remove(element)
 			for element in books:
 				if element in books_c:
 					books.remove(element)
-			print(books)
+
 			nobooks=False
 			if(books==[]):
 				nobooks=True
@@ -549,3 +551,20 @@ def w_manual(request):
 
 	return render(request, 'store/writer/manual.html', context)
 
+def ap(request):
+	conn=sqlite3.connect("db.db")
+	c=conn.cursor()
+	writer=int(request.POST.get('id', False))
+	book_id=int(request.POST.get('book_id', False))
+	if request.POST.get('p', False):
+		p=int(request.POST.get('p', False))
+		p=p/100
+		c.execute("select price from books where book_id =?",(book_id,))
+		price=int(c.fetchone()[0])
+		price=(1-p)*price
+
+		c.execute("update books set price=? where book_id =?",(price,book_id,))
+		conn.commit()
+		return w_store(request,writer)
+
+	return render(request, 'store/writer/ap.html', {'writer':writer, 'book_id':book_id})

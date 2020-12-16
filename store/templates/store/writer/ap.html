@@ -1,0 +1,30 @@
+{% extends 'store/writer/main.html' %}
+{% load static %}
+{% block content %}
+	
+ <div class="row">
+		<div class="col-lg-4">
+			<div class="box-element" id="form-wrapper">
+				<form id="form" method="POST" action="/ap/">{% csrf_token %}
+					<div id="shipping-info">
+						<hr>
+						<p><h2><strong>Promotion</strong></h2></p>
+						<hr>
+
+			<input type='hidden' name='id' value= {{writer}} >
+			<input type='hidden' name='book_id' value= {{book_id}} >
+				<div class="form-field">
+			<select class="btn btn-outline-secondary add-btn" name="p">
+           <option disabled="disabled" selected="selected">Promotion Percentage</option>
+          <option value="75">75%</option>
+          <option value="50">50%</option>
+          <option value="25">25%</option>
+          <option value="10">10%</option>
+     </select>
+					<hr>
+					<input id="form-button" class="btn btn-success btn-block" type="submit" value="Add">
+				</form>
+			</div>
+
+			<br>
+{% endblock content %}
